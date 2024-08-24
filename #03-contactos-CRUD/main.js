@@ -1,5 +1,5 @@
 import { Contacto } from "./contactos.js";
-import { mostrarAgendaCompleta,ingresarContacto,borrarContacto,borrarAgendaCompleta,mostrarMenu,pedirOpcion,buscarContacto,actualizarContacto } from "./funciones.js";
+import { mostrarAgendaCompleta,ingresarContacto,borrarContacto,borrarAgendaCompleta,mostrarMenu,pedirOpcion,buscarContacto,actualizarContacto,salir } from "./funciones.js";
 
 
 

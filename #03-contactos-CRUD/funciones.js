@@ -143,3 +143,8 @@ export function mostrarAgendaCompleta(){
 
     pedirOpcion()
 }
+
+export function salir(){
+    console.log("Saliendo del programa")
+    process.exit()
+}
