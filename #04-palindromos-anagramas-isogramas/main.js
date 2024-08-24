@@ -1,2 +1,2 @@
-import { palabraPalindroma,palabraPalindromaEntradaUsuario } from "./funciones";
+import { palabraPalindroma,palabraPalindromaEntradaUsuario,sonAnagramas,sonAnagramasPedidoAlUsuario } from "./funciones";
 
