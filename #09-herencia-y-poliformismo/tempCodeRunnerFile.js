@@ -1,0 +1,1 @@
+console.log(perro1.getNombre())
