@@ -33,7 +33,8 @@ const filePath = join('C:', 'Users', 'Oliver', 'Downloads', 'texto.txt') //esto 
  * */
 
 //Creamos el archivo gestión de ventas
-let path = "C:\Users\Oliver\Downloads\GestionDeVentas.txt"
+let path = join('C:', 'Users', 'Oliver', 'Downloads', "GestionDeVentas.txt");
+
 
 //funciones.crearArchivo("C:\Users\Oliver\Downloads","GestionDeVentas.txt");
 
@@ -41,7 +42,18 @@ let producto1 = new Producto("Resident Evil HD Remaster",25,2.99); //Producto cr
 
 //funciones.aniadirProducto("GestionDeVentas.txt")
 //funciones.consultarProducto("GestionDeVentas.txt")
-funciones.ventaTotal("GestionDeVentas.txt")
+//funciones.ventaTotal("GestionDeVentas.txt")
+//funciones.borrarProducto("GestionDeVentas.txt")
+//funciones.ventaTotalPorProducto("GestionDeVentas.txt")
+//funciones.actualizarProducto("GestionDeVentas.txt")
+//funciones.borrarArchivo(path)
+
+//funciones.crearArchivo(path,"GestionDeVentas.txt")
+//funciones.aniadirProducto("GestionDeVentas.txt")
+//funciones.ventaTotal("GestionDeVentas.txt")
+//funciones.borrarProducto("GestionDeVentas.txt")
+//funciones.consultarProducto("GestionDeVentas.txt")
+funciones.actualizarProducto("GestionDeVentas.txt")
 
 
 

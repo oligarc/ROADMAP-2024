@@ -100,7 +100,7 @@ export function consultarProducto(fileName) {
                 throw error;
             }
 
-            const lineas = data.split('\n'); //Dividimos el archivo data por salto de líneas
+            const lineas = data.split('\n'); //Dividimos el archivo data por salto de líneas (devuelve un array)
             let productoEncontrado = false;
 
             for (const linea of lineas) { //Recorremos todo el archivo
@@ -124,71 +124,99 @@ export function consultarProducto(fileName) {
                 console.log("Producto no encontrado.")
                 process.exit();
             }
-
         })
-
     })
-
-
 }
 
-export function actualizarProducto(fileName) { //Método que pasando nombre se actualice precio y cantidad vendida
-
-    const path = join('C:', 'Users', 'Oliver', 'Downloads', fileName)
+export function actualizarProducto(fileName) { 
+    const filePath = join('C:', 'Users', 'Oliver', 'Downloads', fileName);
 
     rl.question("Introduzca el nombre del producto que quieras actualizar: ", (nombreProducto) => {
-
-        fs.readFile(path, 'utf8', (error, data) => { //El utf8 se utilzia para explicar a Node que se codifica con utf8 
-
+        fs.readFile(filePath, 'utf8', (error, data) => {
             if (error) {
                 throw error;
             }
 
-            const lineas = data.split('\n'); //Dividimos el archivo data por salto de líneas
+            const lineas = data.split('\n');
             let productoEncontrado = false;
+            const nuevasLineas = [];
 
-            for (const linea of lineas) { //Recorremos todo el archivo
+            // Filtrar las líneas, actualizando el producto deseado
+            for (const linea of lineas) {
+                if (linea.trim() !== '') {
+                    const producto = JSON.parse(linea);
 
-                if (linea.trim() !== '') { //Ignoramos líneas vacías
-                    const producto = JSON.parse(linea); //Cada producto lo parseamos a objeto, ya que en este momento lo tenemos en formato String
-
-                    //Aquí se usa las propiedades en lugar de los  métodos get porque al parsear conseguimos objetos simples y no instancias de la clase Producto
                     if (producto.name.toLowerCase() === nombreProducto.toLowerCase()) {
+                        productoEncontrado = true;
+                        
                         rl.question("Introduzca el nuevo precio: ", (nuevoPrecio) => {
                             rl.question("Introduzca la nueva cantidad vendida: ", (nuevaCantidad) => {
+                                // Actualizamos el producto
+                                producto.precio = parseFloat(nuevoPrecio);
+                                producto.cantidadVendida = parseInt(nuevaCantidad);
 
-                                producto.precio = nuevoPrecio;
-                                producto.cantidadVendida = nuevaCantidad;
-                                productoEncontrado = true;
-                            })
-                        })
+                                // Convertimos el producto actualizado a string JSON
+                                nuevasLineas.push(JSON.stringify(producto));
 
+                                // Añadimos las líneas restantes
+                                nuevasLineas.push(...lineas.slice(lineas.indexOf(linea) + 1));
+
+                                // Sobrescribimos el archivo con las líneas actualizadas
+                                fs.writeFile(filePath, nuevasLineas.join('\n'), 'utf8', (error) => {
+                                    if (error) {
+                                        throw error;
+                                    }
+                                    console.log(`El producto "${nombreProducto}" ha sido actualizado.`);
+                                    rl.close();
+                                });
+                            });
+                        });
+                    } else {
+                        nuevasLineas.push(linea); // Mantenemos la línea si no coincide
                     }
                 }
-
             }
 
             if (!productoEncontrado) {
-                console.log("Producto no encontrado.")
+                console.log("Producto no encontrado.");
+                rl.close();
             }
-
-        })
-
-    })
-
-
+        });
+    });
 }
 
-export function borrarProducto(fileName){
+export function borrarProducto(fileName) {
 
-    const path = join('C:', 'Users', 'Oliver', 'Downloads', fileName);
+    const filePath = join('C:', 'Users', 'Oliver', 'Downloads', fileName);
 
-    rl.question("Introduce el nombre del producto que quieras eliminar: ", (nombreProducto) =>{
-        
+    rl.question("Introduce el nombre del producto que quieras eliminar: ", (nombreProducto) => {
 
+        fs.readFile(filePath, 'utf8', (error, data) => {
+            if (error) {
+                throw error;
+            }
 
-    })
+            // Dividimos en líneas y filtramos el producto a eliminar
+            const nuevasLineas = data.split('\n').filter(linea => {
+                //Creamos un array separando por cada salto de línea y luego filter es un método de arrayas
+                //en JS que crea un nuevo array con los elementos que cumplen la condición que pongamos
+                if (linea.trim() !== '') {
+                    const producto = JSON.parse(linea);
+                    return producto.name.toLowerCase() !== nombreProducto.toLowerCase(); //Si esto es diferente (es decir, no coinciden, se envía al array los demás valores)
+                }
+                return false;
+            }).join('\n'); //Unimos las líneas después del filtro y las vuelve a unir en un solo string separadas por un salto de línea
 
+            // Sobrescribimos el archivo con las líneas restantes
+            fs.writeFile(filePath, nuevasLineas, 'utf8', (error) => {
+                if (error) {
+                    throw error;
+                }
+                console.log(`Si existía, el producto "${nombreProducto}" ha sido eliminado.`);
+                rl.close();
+            });
+        });
+    });
 }
 
 
@@ -198,13 +226,14 @@ export function ventaTotal(fileName) {
     let precioTotal = 0;
 
     fs.readFile(filePath, 'utf8', (error, data) => {
-        
+
         if (error) {
             console.error('Error al leer el archivo:', error);
             return; // Sale de la función si hay un error
         }
 
         const lineas = data.split('\n');
+
         for (const linea of lineas) {
             if (linea.trim() !== '') { // Ignoramos líneas vacías
                 try {
@@ -218,6 +247,46 @@ export function ventaTotal(fileName) {
 
         console.log(`El precio de todas las ventas asciende a un total de ${precioTotal} euros.`);
     });
+}
+
+export function ventaTotalPorProducto(fileName) {
+
+    const filePath = join('C:', 'Users', 'Oliver', 'Downloads', fileName);
+    let precioTotal = 0;
+
+    fs.readFile(filePath, 'utf8', (error, data) => {
+
+        if (error) {
+            console.error('Error al leer el archivo:', error);
+            return; // Sale de la función si hay un error
+        }
+
+        rl.question("Introduce el nombre del producto a buscar: ", (nombreProducto) => {
+
+            const lineas = data.split('\n')
+
+            for (const linea of lineas) {
+                if (linea.trim() !== '') {
+                    try {
+                        const producto = JSON.parse(linea);
+
+                        if (producto.name.toLowerCase() === nombreProducto.toLowerCase()) {
+                            precioTotal = producto.precio * producto.cantidadVendida;
+                            break;
+                        }
+
+                    } catch (jsonError) {
+                        console.error('Error al parsear JSON:', jsonError);
+                    }
+                }
+            }
+
+            console.log("El total de las ventas del producto " + nombreProducto + " es de " + precioTotal + " euros.")
+
+        })
+
+    })
+
 }
 
 
