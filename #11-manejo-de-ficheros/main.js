@@ -11,12 +11,13 @@
 import { error } from "console";
 import * as fs from 'fs'; //Importas todas las funciones de filesystem
 import { join } from "path";
-import { escribirArchivo,crearArchivo,leerArchivo,borrarArchivo } from "./funciones.js";
+import * as funciones from "./funciones.js";
+import { Producto } from "./producto.js";
 
 const filePath = join('C:', 'Users', 'Oliver', 'Downloads', 'texto.txt') //esto es otra opción para pasar la ruta
 
-crearArchivo(filePath,"texto.txt")
-leerArchivo(filePath)
+//funciones.crearArchivo(filePath,"texto.txt")
+//funciones.leerArchivo(filePath)
 
 //Inicio programa complicado
 
@@ -30,6 +31,19 @@ leerArchivo(filePath)
  * - La opción salir borra el .txt.
  * 
  * */
+
+//Creamos el archivo gestión de ventas
+let path = "C:\Users\Oliver\Downloads\GestionDeVentas.txt"
+
+//funciones.crearArchivo("C:\Users\Oliver\Downloads","GestionDeVentas.txt");
+
+let producto1 = new Producto("Resident Evil HD Remaster",25,2.99); //Producto creado pero sin más porque el ejercicio te pide que lo introduzcas por consola
+
+//funciones.aniadirProducto("GestionDeVentas.txt")
+//funciones.consultarProducto("GestionDeVentas.txt")
+funciones.actualizarProducto("GestionDeVentas.txt")
+
+
 
 
 
