@@ -185,9 +185,39 @@ export function borrarProducto(fileName){
 
     rl.question("Introduce el nombre del producto que quieras eliminar: ", (nombreProducto) =>{
         
-        
+
 
     })
 
 }
+
+
+export function ventaTotal(fileName) {
+
+    const filePath = join('C:', 'Users', 'Oliver', 'Downloads', fileName);
+    let precioTotal = 0;
+
+    fs.readFile(filePath, 'utf8', (error, data) => {
+        
+        if (error) {
+            console.error('Error al leer el archivo:', error);
+            return; // Sale de la función si hay un error
+        }
+
+        const lineas = data.split('\n');
+        for (const linea of lineas) {
+            if (linea.trim() !== '') { // Ignoramos líneas vacías
+                try {
+                    const producto = JSON.parse(linea);
+                    precioTotal += (producto.precio * producto.cantidadVendida);
+                } catch (jsonError) {
+                    console.error('Error al parsear JSON:', jsonError);
+                }
+            }
+        }
+
+        console.log(`El precio de todas las ventas asciende a un total de ${precioTotal} euros.`);
+    });
+}
+
 

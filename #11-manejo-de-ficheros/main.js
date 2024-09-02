@@ -41,7 +41,7 @@ let producto1 = new Producto("Resident Evil HD Remaster",25,2.99); //Producto cr
 
 //funciones.aniadirProducto("GestionDeVentas.txt")
 //funciones.consultarProducto("GestionDeVentas.txt")
-funciones.actualizarProducto("GestionDeVentas.txt")
+funciones.ventaTotal("GestionDeVentas.txt")
 
 
 
