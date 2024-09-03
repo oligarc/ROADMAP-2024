@@ -1,0 +1,8 @@
+
+{
+    "nombre" : "Oliver",
+    "edad" : 25,
+    "fecha_nacimiento" : 1999,
+    "lenguajes_programacion" : ["Java","Javascript","SQL","PLSQL"]
+    
+}
